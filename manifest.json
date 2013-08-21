@@ -1,0 +1,24 @@
+{
+	"name": "Find My Bookmarks",
+	"version": "1.1.4",
+	"manifest_version": 2,
+	"description": "Find all your related bookmarks for the current website.",
+	"permissions": [
+		"bookmarks", "tabs"
+	],
+	"background": {
+	  "scripts": ["js/background.js"]
+	},
+	"options_page": "options.html",
+	"page_action": {
+		"default_title": "Find My Bookmarks",
+		"default_icon": "img/icon.png",
+		"default_popup": "popup.html"
+	},
+	"icons": {
+		"16": "img/icon.png",
+		"48": "img/icon48.png",
+		"64": "img/icon64.png",
+		"128": "img/icon128.png"
+	}
+}

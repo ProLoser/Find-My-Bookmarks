@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Find My Bookmarks</title>
+	<link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700" rel="stylesheet" type="text/css">
+	<link href="css/options.css" rel="stylesheet">
+	<script src="js/jquery.min.js"></script>
+	<script src="js/options.js"></script>
+</head>
+<body>
+<h1>About Find My Bookmarks</h1>
+<div class="container">
+	<p id="status">Settings were saved!</p>
+	<form>
+		<h2>Settings</h2>
+		
+		<h3>Active Settings</h3>
+		<p>
+			<input id="no_share" type="checkbox">
+			<label for="no_share">
+				Hide Share Links
+				<span>Antisocial? Fine with us!</span>
+			</label>
+		</p>
+		<p>
+			<input id="no_folders" type="checkbox">
+			<label for="no_folders">
+				Hide Folders
+				<span>Disable the display of the parent folder</span>
+			</label>
+		</p>
+		<p>
+			<input id="hover_url" type="checkbox">
+			<label for="hover_url">
+				Show URL on Hover
+				<span>The entire row shows the url when you hover over it</span>
+			</label>
+		</p>
+		<p>
+			<input id="path_only" type="checkbox">
+			<label for="path_only">
+				Hide domain from hover URL
+				<span>Only the path to the file page will be shown, making the URL shorter</span>
+				<span><em>http://en.wikipedia.org/wiki/Biography</em> becomes <em>/wiki/Biography</em></span>
+			</label>
+		</p>
+		<p>
+			<input id="ignore_subdomain" type="checkbox">
+			<label for="ignore_subdomain">
+				Ignore Subdomains
+				<span><em>en.wikipedia.org</em> and <em>fr.wikipedia.org</em> are treated as the same domain</span>
+			</label>
+		</p>
+		<h3>Inactive Settings</h3>
+		<p>
+			<input id="ignore_current_page" type="checkbox">
+			<label for="ignore_current_page">
+				Ignore Current Page
+				<span>If the current page is the only bookmark you have, do not show in the results</span>
+			</label>
+		</p>
+	</form>
+	
+	<h2>Found a Bug? Want a Feature?</a></h2>
+	<p><a href="https://docs.google.com/spreadsheet/viewform?formkey=dDY4Z09NUTNzZjlsaFM4QlhLRG1HLXc6MQ">Send us a note</a> -- we'll let you know if it's in an upcoming release!</p>
+	
+	<h2>Upcoming Features</h2>
+	<ul>
+		<li><strike>Show the folder path to each bookmark</strike></li>
+		<li><strike>Option to ignore subdomains (so that sites like en.wikipedia.org and wikipedia.org will share results)</strike></li>
+		<li>Hide the plugin if the current page is the only bookmark you have</li>
+		<li>Image optimization for smaller filesizes</li>
+		<li>Page titles included in sharing to Twitter, Facebook and Emails</li>
+		<li>Sharing options permanent for any URL</li>
+	</ul>
+	
+	<h2>Extension Updates</h2>
+	<h3>v1.1.4</h3>
+	<ul>
+		<li>Fixed options page after upgrading</li>
+	</ul>
+	<h3>v1.1.3</h3>
+	<ul>
+		<li>Upgrading for the new version of chrome</li>
+	</ul>
+	<h3>v1.1.2</h3>
+	<ul>
+		<li>Enhanced URL detection, better support for 2-part suffixes (co.uk)</li>
+		<li>Using dynamic protocol for CSS and JS assets (fixes encryption warnings)</li>
+	</ul>
+	<h3>v1.1.1</h3>
+	<ul>
+		<li>Added 'Hide Share Links' option</li>
+		<li>Added Parent Folder and 'Hide Folders' option. Only shows the immediate parent at this time</li>
+		<li>Fixed the fact that no one can install the plugin (kind of a big deal)</li>
+	</ul>
+	<h3>v1.1.0</h3>
+	<ul>
+		<li>Cleaned up file structure</li>
+		<li>Finished 'Ignore Subdomain' option</li>
+		<li>Added 'Hide domain from hover URL' option</li>
+		<li>A lot more stylistic tweaks</li>
+	</ul>
+	<h3>v1.0.8</h3>
+	<ul>
+		<li>Small stylistic tweaks</li>
+	</ul>
+	<h3>v1.0.7</h3>
+	<ul>
+		<li>Added option to show url of link upon hover</li>
+	</ul>
+	<h3>v1.0.6</h3>
+	<ul>
+		<li>Fixed small visual bug with delete</li>
+		<li>Added working options link</li>
+		<li>Added URL tooltips to bookmarks</li>
+	</ul>
+	<h3>v1.0.5</h3>
+	<ul>
+		<li>Domain-level actions (email/share/tweet)</li>
+		<li>Add an 'email' action</li>
+		<li>Make the entire row clickable</li>
+	</ul>
+	<h3>v1.0.4</h3>
+	<ul>
+		<li>Moved footer to options page</li>
+	</ul>
+	
+	<footer>
+		<h3>Credits</h3>
+		<p><strong><a href="http://www.findmybookmarks.com" target="_blank">Find My Bookmarks</a></strong> was brought to you by <a href="http://www.usabilitycounts.com" target="_blank">Usability Counts</a> and <a href="http://www.deansofer.com" target="_blank">Dean Sofer</a>.<br>For more fun, download the <a href="http://www.uxdrinkinggame.com" target="_blank">UX Drinking Game</a> for your iPhone or visit the <a href="http://www.uxdrinkinggame.com" target="_blank">website</a>.</p>
+	</footer>
+</div>
+</body>
+</html>
