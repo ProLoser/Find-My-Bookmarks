@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import "./options.css"
 
+const API = chrome || browser;
+
 interface Settings {
   no_share: boolean
   no_folders: boolean
@@ -25,7 +27,7 @@ function OptionsPage() {
 
   const loadSettings = async () => {
     try {
-      const result = await chrome.storage.local.get([
+      const result = await API.storage.local.get([
         'no_share',
         'no_folders', 
         'ignore_subdomain',
@@ -56,7 +58,7 @@ function OptionsPage() {
         storageData[key] = value.toString()
       })
 
-      await chrome.storage.local.set(storageData)
+      await API.storage.local.set(storageData)
       
       setShowStatus(true)
       setTimeout(() => setShowStatus(false), 2000)

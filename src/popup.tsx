@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import "./popup.css"
 
+const API = chrome || browser;
+
 interface Bookmark {
   id: string
   title: string
@@ -28,7 +30,7 @@ function Popup() {
   const loadBookmarks = async () => {
     try {
       // Get current tab
-      const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true })
+      const [activeTab] = await API.tabs.query({ active: true, currentWindow: true })
       if (!activeTab.url) return
 
       // Extract domain
@@ -36,7 +38,7 @@ function Popup() {
       let currentDomain = urlParts[4] || ""
 
       // Load settings
-      const result = await chrome.storage.local.get([
+      const result = await API.storage.local.get([
         'ignore_subdomain', 
         'hover_url', 
         'no_folders', 
@@ -56,7 +58,7 @@ function Popup() {
       setDomain(currentDomain)
 
       // Get bookmarks
-      const bookmarkTree = await chrome.bookmarks.getTree()
+      const bookmarkTree = await API.bookmarks.getTree()
       const matchingBookmarks: Bookmark[] = []
 
       function searchBookmarks(tree: chrome.bookmarks.BookmarkTreeNode[], parentTitle = "") {
@@ -87,7 +89,7 @@ function Popup() {
 
   const deleteBookmark = async (bookmarkId: string) => {
     try {
-      await chrome.bookmarks.remove(bookmarkId)
+      await API.bookmarks.remove(bookmarkId)
       setBookmarks(prev => prev.filter(b => b.id !== bookmarkId))
     } catch (error) {
       console.error('Error deleting bookmark:', error)
@@ -147,7 +149,7 @@ function Popup() {
             <li>
               <a 
                 className="options" 
-                href={chrome.runtime.getURL("options.html")}
+                href={API.runtime.getURL("options.html")}
                 target="_blank" 
                 title="Settings"
               >
