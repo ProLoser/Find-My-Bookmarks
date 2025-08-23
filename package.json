@@ -17,14 +17,20 @@
   ],
   "scripts": {
     "dev": "plasmo dev",
-    "build": "plasmo build",
-    "build:firefox": "plasmo build --target=firefox-mv2",
+    "build": "yarn build:all",
+    "build:all": "yarn build:chrome && yarn build:firefox && yarn build:edge && yarn build:safari && yarn build:opera && yarn build:brave",
     "build:chrome": "plasmo build --target=chrome-mv3",
+    "build:firefox": "plasmo build --target=firefox-mv2",
     "build:edge": "plasmo build --target=edge-mv3",
     "build:safari": "plasmo build --target=safari",
     "build:opera": "plasmo build --target=opera",
     "build:brave": "plasmo build --target=brave",
-    "package": "plasmo package"
+    "package": "plasmo package",
+    "package:all": "yarn build:all && yarn package:chrome && yarn package:firefox && yarn package:edge && yarn package:safari",
+    "package:chrome": "cd build/chrome-mv3-prod && zip -r ../../find-my-bookmarks-chrome.zip .",
+    "package:firefox": "cd build/firefox-mv2-prod && zip -r ../../find-my-bookmarks-firefox.zip .",
+    "package:edge": "cd build/edge-mv3-prod && zip -r ../../find-my-bookmarks-edge.zip .",
+    "package:safari": "cd build/safari-prod && zip -r ../../find-my-bookmarks-safari.zip ."
   },
   "devDependencies": {
     "@types/chrome": "^0.1.4",
