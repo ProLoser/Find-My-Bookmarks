@@ -1,0 +1,54 @@
+{
+  "name": "find-my-bookmarks",
+  "displayName": "Find My Bookmarks",
+  "version": "2.0.0",
+  "description": "Find all your related bookmarks for the current website.",
+  "author": "Dean Sofer",
+  "license": "GPL-2.0",
+  "keywords": [
+    "bookmarks",
+    "browser-extension",
+    "chrome",
+    "firefox",
+    "edge",
+    "safari",
+    "opera",
+    "brave"
+  ],
+  "scripts": {
+    "dev": "plasmo dev",
+    "build": "plasmo build",
+    "build:firefox": "plasmo build --target=firefox-mv2",
+    "build:chrome": "plasmo build --target=chrome-mv3",
+    "build:edge": "plasmo build --target=edge-mv3",
+    "build:safari": "plasmo build --target=safari",
+    "build:opera": "plasmo build --target=opera",
+    "build:brave": "plasmo build --target=brave",
+    "package": "plasmo package"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.1.4",
+    "@types/react": "^19.1.11",
+    "@types/react-dom": "^19.1.7",
+    "plasmo": "^0.90.5",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "manifest": {
+    "permissions": [
+      "bookmarks",
+      "tabs",
+      "activeTab",
+      "storage"
+    ],
+    "browser_specific_settings": {
+      "gecko": {
+        "id": "{FIREFOX_EXTENSION_ID_PLACEHOLDER}",
+        "strict_min_version": "109.0"
+      }
+    }
+  }
+}
