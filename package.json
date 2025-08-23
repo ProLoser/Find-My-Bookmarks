@@ -26,11 +26,11 @@
     "build:opera": "plasmo build --target=opera",
     "build:brave": "plasmo build --target=brave",
     "package": "plasmo package",
-    "package:all": "yarn build:all && yarn package:chrome && yarn package:firefox && yarn package:edge && yarn package:safari",
-    "package:chrome": "cd build/chrome-mv3-prod && zip -r ../../find-my-bookmarks-chrome.zip .",
-    "package:firefox": "cd build/firefox-mv2-prod && zip -r ../../find-my-bookmarks-firefox.zip .",
-    "package:edge": "cd build/edge-mv3-prod && zip -r ../../find-my-bookmarks-edge.zip .",
-    "package:safari": "cd build/safari-prod && zip -r ../../find-my-bookmarks-safari.zip ."
+    "package:all": "yarn package:chrome && yarn package:firefox && yarn package:edge && yarn package:safari",
+    "package:chrome": "plasmo build --target=chrome-mv3 && plasmo package --target=chrome-mv3",
+    "package:firefox": "plasmo build --target=firefox-mv2 && plasmo package --target=firefox-mv2",
+    "package:edge": "plasmo build --target=edge-mv3 && plasmo package --target=edge-mv3",
+    "package:safari": "plasmo build --target=safari && plasmo package --target=safari"
   },
   "devDependencies": {
     "@types/chrome": "^0.1.4",
