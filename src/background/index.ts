@@ -47,11 +47,12 @@ function checkForValidUrl(tabId: number, _changeInfo: any, tab: chrome.tabs.Tab)
   
   let domain: string;
   
-  // Extract domain from URL
-  const urlParts = tab.url.split(/\/+/g);
-  if (urlParts.length > 1) {
-    domain = urlParts[1].replace('www.', '');
-  } else {
+  // Extract domain using URL constructor for reliability
+  try {
+    const url = new URL(tab.url);
+    domain = url.hostname.replace(/^www\./, '');
+  } catch (error) {
+    console.error('Invalid URL:', tab.url);
     return;
   }
   

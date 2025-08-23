@@ -36,9 +36,15 @@ function Popup() {
       const [activeTab] = await API.tabs.query({ active: true, currentWindow: true })
       if (!activeTab.url) return
 
-      // Extract domain
-      const urlParts = activeTab.url.split(/^((\w+:)?\/\/)?(www\.)?([\\w|\\.])+/gi)
-      let currentDomain = urlParts[4] || ""
+      // Extract domain using URL constructor for reliability
+      let currentDomain = ""
+      try {
+        const url = new URL(activeTab.url)
+        currentDomain = url.hostname.replace(/^www\./, '')
+      } catch (error) {
+        console.error('Invalid URL:', activeTab.url)
+        return
+      }
 
       // Load settings
       const result = await API.storage.local.get([
