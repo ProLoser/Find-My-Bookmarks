@@ -52,7 +52,7 @@
     ],
     "browser_specific_settings": {
       "gecko": {
-        "id": "{FIREFOX_EXTENSION_ID_PLACEHOLDER}",
+        "id": "@find-my-bookmarks",
         "strict_min_version": "109.0"
       }
     }
