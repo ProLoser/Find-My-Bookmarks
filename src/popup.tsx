@@ -18,6 +18,7 @@ interface Settings {
   hover_url?: string
   no_folders?: string
   no_share?: string
+  ignore_current_page?: string
 }
 
 function Popup() {
@@ -51,7 +52,8 @@ function Popup() {
         'ignore_subdomain', 
         'hover_url', 
         'no_folders', 
-        'no_share'
+        'no_share',
+        'ignore_current_page'
       ])
       setSettings(result)
 
@@ -74,6 +76,11 @@ function Popup() {
         for (const node of tree) {
           if (!node.children && node.url) {
             if (node.url.includes(currentDomain)) {
+              // Check if we should ignore exact matches for the current page
+              if (result.ignore_current_page === 'true' && node.url === activeTab.url) {
+                continue; // Skip this bookmark as it matches the current page exactly
+              }
+              
               matchingBookmarks.push({
                 id: node.id,
                 title: node.title,

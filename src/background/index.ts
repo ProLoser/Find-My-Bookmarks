@@ -56,9 +56,9 @@ function checkForValidUrl(tabId: number, _changeInfo: any, tab: chrome.tabs.Tab)
     return;
   }
   
-  // Apply subdomain filtering if enabled
+  // Apply subdomain filtering and check ignore current page setting
   if (API.storage?.local) {
-    API.storage.local.get(['ignore_subdomain'], function(result) {
+    API.storage.local.get(['ignore_subdomain', 'ignore_current_page'], function(result) {
       if (result.ignore_subdomain === 'true') {
         const pieces = domain.split('.');
         if (pieces.length > 2 && (pieces.length !== 3 || pieces[1] !== 'co' || pieces[2] !== 'uk')) {
@@ -66,21 +66,26 @@ function checkForValidUrl(tabId: number, _changeInfo: any, tab: chrome.tabs.Tab)
           domain = pieces.join('.');
         }
       }
-      searchBookmarks(tabId, domain);
+      searchBookmarks(tabId, domain, tab.url, result.ignore_current_page === 'true');
     });
   } else {
     // Fallback for compatibility
-    searchBookmarks(tabId, domain);
+    searchBookmarks(tabId, domain, tab.url, false);
   }
 }
 
-function searchBookmarks(tabId: number, domain: string) {
+function searchBookmarks(tabId: number, domain: string, currentUrl: string, ignoreCurrentPage: boolean) {
   let matches = 0;
   
   function iterator(tree: chrome.bookmarks.BookmarkTreeNode[]) {
     for (const node of tree) {
       if (!node.children && node.url) {
         if (node.url.includes(domain)) {
+          // Check if we should ignore exact matches for the current page
+          if (ignoreCurrentPage && node.url === currentUrl) {
+            continue; // Skip this bookmark as it matches the current page exactly
+          }
+          
           matches++;
           if (matches > 9) {
             matches = 9;
@@ -99,6 +104,9 @@ function searchBookmarks(tabId: number, domain: string) {
   if (matches > 0) {
     const badgeText = matches > 9 ? '9+' : matches.toString();
     setBadge(tabId, badgeText, '#275786');
+  } else {
+    // Clear the badge if no matches
+    setBadge(tabId, '', '#275786');
   }
 }
 
