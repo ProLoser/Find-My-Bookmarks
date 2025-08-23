@@ -161,7 +161,7 @@ function Popup() {
     }
     return (
       <menu>
-        {items.map(item => <li>{item}</li>)}
+        {items.map((item, index) => <li key={index}>{item}</li>)}
       </menu>
     )
   }
