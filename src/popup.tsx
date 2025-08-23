@@ -1,0 +1,209 @@
+import { useEffect, useState } from "react"
+import "./popup.css"
+
+// Declare browser for cross-browser compatibility
+declare const browser: typeof chrome;
+
+const API = typeof chrome !== 'undefined' ? chrome : browser;
+
+interface Bookmark {
+  id: string
+  title: string
+  url: string
+  parentId?: string
+}
+
+interface Settings {
+  ignore_subdomain?: string
+  hover_url?: string
+  no_folders?: string
+  no_share?: string
+  ignore_current_page?: string
+}
+
+function Popup() {
+  const [bookmarks, setBookmarks] = useState<Bookmark[]>([])
+  const [domain, setDomain] = useState<string>("")
+  const [settings, setSettings] = useState<Settings>({})
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    loadBookmarks()
+  }, [])
+
+  const loadBookmarks = async () => {
+    try {
+      // Get current tab
+      const [activeTab] = await API.tabs.query({ active: true, currentWindow: true })
+      if (!activeTab.url) return
+
+      // Extract domain using URL constructor for reliability
+      let currentDomain = ""
+      try {
+        const url = new URL(activeTab.url)
+        currentDomain = url.hostname.replace(/^www\./, '')
+      } catch (error) {
+        console.error('Invalid URL:', activeTab.url)
+        return
+      }
+
+      // Load settings
+      const result = await API.storage.local.get([
+        'ignore_subdomain', 
+        'hover_url', 
+        'no_folders', 
+        'no_share',
+        'ignore_current_page'
+      ])
+      setSettings(result)
+
+      // Apply subdomain filtering
+      if (result.ignore_subdomain === 'true') {
+        const pieces = currentDomain.split('.')
+        if (pieces.length > 2 && (pieces.length !== 3 || pieces[1] !== 'co' || pieces[2] !== 'uk')) {
+          pieces.shift()
+          currentDomain = pieces.join('.')
+        }
+      }
+
+      setDomain(currentDomain)
+
+      // Get bookmarks
+      const bookmarkTree = await API.bookmarks.getTree()
+      const matchingBookmarks: Bookmark[] = []
+
+      function searchBookmarks(tree: chrome.bookmarks.BookmarkTreeNode[], parentTitle = "") {
+        for (const node of tree) {
+          if (!node.children && node.url) {
+            if (node.url.includes(currentDomain)) {
+              // Check if we should ignore exact matches for the current page
+              if (result.ignore_current_page === 'true' && node.url === activeTab.url) {
+                continue; // Skip this bookmark as it matches the current page exactly
+              }
+              
+              matchingBookmarks.push({
+                id: node.id,
+                title: node.title,
+                url: node.url,
+                parentId: parentTitle
+              })
+            }
+          } else if (node.children) {
+            searchBookmarks(node.children, node.title)
+          }
+        }
+      }
+
+      searchBookmarks(bookmarkTree)
+      setBookmarks(matchingBookmarks)
+    } catch (error) {
+      console.error('Error loading bookmarks:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const deleteBookmark = async (bookmarkId: string) => {
+    try {
+      await API.bookmarks.remove(bookmarkId)
+      setBookmarks(prev => prev.filter(b => b.id !== bookmarkId))
+    } catch (error) {
+      console.error('Error deleting bookmark:', error)
+    }
+  }
+
+  const renderMenu = (url: string, title: string, id?: string) => {
+    const items = [];
+    if (id) {
+      items.push(
+        <a
+          className="delete"
+          onClick={() => deleteBookmark(id)}
+          title="Delete this bookmark"
+        >
+          Delete
+        </a>
+      );
+
+      if (settings.no_share !== 'true') {
+        items.push(
+          <a
+            className="twitter"
+            href={`https://twitter.com/home?status=${encodeURI(url)}`}
+            target="_blank"
+            title="Share on Twitter"
+          >
+            Tweet
+          </a>,
+          <a
+            className="facebook"
+            href={`http://www.facebook.com/sharer.php?u=${url}&t=${title}`}
+            target="_blank"
+            title="Share on Facebook"
+          >
+            Share
+          </a>,
+          <a
+            className="email"
+            href={`mailto:?subject=Checkout this site: ${title}&body=${url}`}
+            target="_blank"
+            title="Email to a Friend"
+          >
+            Email
+          </a>
+        );
+      }
+
+    } else {
+      items.push(
+        <a
+          className="options"
+          href={API.runtime.getURL("options.html")}
+          target="_blank"
+          title="Settings"
+        >
+          Settings
+        </a>
+      );
+    }
+    return (
+      <menu>
+        {items.map((item, index) => <li key={index}>{item}</li>)}
+      </menu>
+    )
+  }
+
+  if (loading) {
+    return <div className="loading">Loading bookmarks...</div>
+  }
+
+  return (
+    <div className="popup-container">
+      <h2>
+        {renderMenu(domain, domain)}
+        <strong>{domain}</strong> Bookmarks
+      </h2>
+      <div className={`list ${settings.hover_url === 'true' ? 'hoverUrl' : ''} ${settings.no_folders !== 'true' ? 'folders' : ''}`}>
+        {bookmarks.length === 0 ? (
+          <div className="no-bookmarks">No bookmarks found for this domain</div>
+        ) : (
+          <ul>
+            {bookmarks.map((bookmark) => (
+              <li key={bookmark.id}>
+                {renderMenu(bookmark.url, bookmark.title, bookmark.id)}
+                <a href={bookmark.url} target="_blank" title={bookmark.url}>
+                  {bookmark.title}
+                </a>
+                {settings.no_folders !== 'true' && bookmark.parentId && (
+                  <span className="folder">{bookmark.parentId}</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
+  )
+}
+
+export default Popup

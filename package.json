@@ -1,0 +1,60 @@
+{
+  "name": "find-my-bookmarks",
+  "displayName": "Find My Bookmarks",
+  "version": "2.0.0",
+  "description": "Find all your related bookmarks for the current website.",
+  "author": "Dean Sofer",
+  "license": "GPL-2.0",
+  "keywords": [
+    "bookmarks",
+    "browser-extension",
+    "chrome",
+    "firefox",
+    "edge",
+    "safari",
+    "opera",
+    "brave"
+  ],
+  "scripts": {
+    "dev": "plasmo dev",
+    "build": "yarn build:all",
+    "build:all": "yarn build:chrome && yarn build:firefox && yarn build:edge && yarn build:safari && yarn build:opera && yarn build:brave",
+    "build:chrome": "plasmo build --target=chrome-mv3",
+    "build:firefox": "plasmo build --target=firefox-mv2",
+    "build:edge": "plasmo build --target=edge-mv3",
+    "build:safari": "plasmo build --target=safari",
+    "build:opera": "plasmo build --target=opera",
+    "build:brave": "plasmo build --target=brave",
+    "package": "plasmo package",
+    "package:all": "yarn package:chrome && yarn package:firefox && yarn package:edge && yarn package:safari",
+    "package:chrome": "plasmo build --target=chrome-mv3 && plasmo package --target=chrome-mv3",
+    "package:firefox": "plasmo build --target=firefox-mv2 && plasmo package --target=firefox-mv2",
+    "package:edge": "plasmo build --target=edge-mv3 && plasmo package --target=edge-mv3",
+    "package:safari": "plasmo build --target=safari && plasmo package --target=safari"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.1.4",
+    "@types/react": "^19.1.11",
+    "@types/react-dom": "^19.1.7",
+    "plasmo": "^0.90.5",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "manifest": {
+    "permissions": [
+      "bookmarks",
+      "tabs",
+      "activeTab",
+      "storage"
+    ],
+    "browser_specific_settings": {
+      "gecko": {
+        "id": "@find-my-bookmarks",
+        "strict_min_version": "109.0"
+      }
+    }
+  }
+}
