@@ -7,7 +7,6 @@ declare const browser: typeof chrome;
 // Cross-browser API compatibility
 const API = typeof chrome !== 'undefined' ? chrome : browser;
 
-// Cross-browser badge API wrapper to eliminate "as any" usage throughout the code
 const setBadge = (tabId: number, text: string, color: string) => {
   if (API.action) {
     // Manifest v3 (Chrome/Edge)
@@ -15,7 +14,7 @@ const setBadge = (tabId: number, text: string, color: string) => {
     API.action.setBadgeBackgroundColor({ color, tabId });
   } else {
     // Manifest v2 (Firefox) - consolidated type assertion in one place
-    const browserAction = (API as any).browserAction;
+    const browserAction = API.browserAction;
     if (browserAction) {
       browserAction.setBadgeText({ text, tabId });
       browserAction.setBadgeBackgroundColor({ color, tabId });
