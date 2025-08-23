@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react"
 import "./options.css"
 
-const API = chrome || browser;
+// Declare browser for cross-browser compatibility
+declare const browser: typeof chrome;
+
+const API = typeof chrome !== 'undefined' ? chrome : browser;
 
 interface Settings {
   no_share: boolean
@@ -157,8 +160,8 @@ function OptionsPage() {
 
         <h2>Upcoming Features</h2>
         <ul>
-          <li><strike>Show the folder path to each bookmark</strike></li>
-          <li><strike>Option to ignore subdomains (so that sites like en.wikipedia.org and wikipedia.org will share results)</strike></li>
+          <li><del>Show the folder path to each bookmark</del></li>
+          <li><del>Option to ignore subdomains (so that sites like en.wikipedia.org and wikipedia.org will share results)</del></li>
           <li>Hide the plugin if the current page is the only bookmark you have</li>
           <li>Image optimization for smaller filesizes</li>
           <li>Page titles included in sharing to Twitter, Facebook and Emails</li>

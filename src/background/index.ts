@@ -1,7 +1,27 @@
 // Background service worker for Find My Bookmarks extension
 // Handles bookmark counting and page action display
 
-const API = chrome || browser;
+// Declare browser for cross-browser compatibility
+declare const browser: typeof chrome;
+
+// Cross-browser API compatibility
+const API = typeof chrome !== 'undefined' ? chrome : browser;
+
+// Cross-browser badge API wrapper to eliminate "as any" usage throughout the code
+const setBadge = (tabId: number, text: string, color: string) => {
+  if (API.action) {
+    // Manifest v3 (Chrome/Edge)
+    API.action.setBadgeText({ text, tabId });
+    API.action.setBadgeBackgroundColor({ color, tabId });
+  } else {
+    // Manifest v2 (Firefox) - consolidated type assertion in one place
+    const browserAction = (API as any).browserAction;
+    if (browserAction) {
+      browserAction.setBadgeText({ text, tabId });
+      browserAction.setBadgeBackgroundColor({ color, tabId });
+    }
+  }
+};
 
 let fullTree: chrome.bookmarks.BookmarkTreeNode[];
 
@@ -22,7 +42,7 @@ function refreshTree() {
 }
 
 // Called when the url of a tab changes
-function checkForValidUrl(tabId: number, changeInfo: chrome.tabs.TabChangeInfo, tab: chrome.tabs.Tab) {
+function checkForValidUrl(tabId: number, _changeInfo: any, tab: chrome.tabs.Tab) {
   if (!tab.url || !fullTree) return;
   
   let domain: string;
@@ -77,26 +97,7 @@ function searchBookmarks(tabId: number, domain: string) {
   
   if (matches > 0) {
     const badgeText = matches > 9 ? '9+' : matches.toString();
-    
-    // Use API.action for manifest v3, API.browserAction for manifest v2
-    if (API.action) {
-      // Manifest v3
-      API.action.show(tabId);
-      API.action.setBadgeText({ text: badgeText, tabId: tabId });
-      API.action.setBadgeBackgroundColor({ color: '#275786', tabId: tabId });
-    } else if ((API as any).browserAction) {
-      // Manifest v2 fallback
-      (API as any).browserAction.show(tabId);
-      (API as any).browserAction.setBadgeText({ text: badgeText, tabId: tabId });
-      (API as any).browserAction.setBadgeBackgroundColor({ color: '#275786', tabId: tabId });
-    }
-  } else {
-    // Hide action when no matches
-    if (API.action) {
-      API.action.hide(tabId);
-    } else if ((API as any).browserAction) {
-      (API as any).browserAction.hide(tabId);
-    }
+    setBadge(tabId, badgeText, '#275786');
   }
 }
 

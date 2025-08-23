@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react"
 import "./popup.css"
 
-const API = chrome || browser;
+// Declare browser for cross-browser compatibility
+declare const browser: typeof chrome;
+
+const API = typeof chrome !== 'undefined' ? chrome : browser;
 
 interface Bookmark {
   id: string
@@ -170,7 +173,7 @@ function Popup() {
     <div className="popup-container">
       <h2>
         <strong>{domain}</strong> Bookmarks
-        {renderMenu(domain)}
+        {renderMenu(domain, domain)}
       </h2>
       <div className={`list ${settings.hover_url === 'true' ? 'hoverUrl' : ''} ${settings.no_folders !== 'true' ? 'folders' : ''}`}>
         {bookmarks.length === 0 ? (
