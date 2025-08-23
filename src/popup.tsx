@@ -100,68 +100,63 @@ function Popup() {
   }
 
   const renderMenu = (url: string, title: string, id?: string) => {
+    const items = [];
+    if (id) {
+      items.push(
+        <a
+          className="delete"
+          onClick={() => deleteBookmark(id)}
+          title="Delete this bookmark"
+        >
+          Delete
+        </a>
+      );
+
+      if (settings.no_share !== 'true') {
+        items.push(
+          <a
+            className="twitter"
+            href={`https://twitter.com/home?status=${encodeURI(url)}`}
+            target="_blank"
+            title="Share on Twitter"
+          >
+            Tweet
+          </a>,
+          <a
+            className="facebook"
+            href={`http://www.facebook.com/sharer.php?u=${url}&t=${title}`}
+            target="_blank"
+            title="Share on Facebook"
+          >
+            Share
+          </a>,
+          <a
+            className="email"
+            href={`mailto:?subject=Checkout this site: ${title}&body=${url}`}
+            target="_blank"
+            title="Email to a Friend"
+          >
+            Email
+          </a>
+        );
+      }
+
+    } else {
+      items.push(
+        <a
+          className="options"
+          href={API.runtime.getURL("options.html")}
+          target="_blank"
+          title="Settings"
+        >
+          Settings
+        </a>
+      );
+    }
     return (
-      <div className="menu">
-        <ul>
-          {id && (
-            <li>
-              <button 
-                className="delete" 
-                onClick={() => deleteBookmark(id)}
-                title="Delete this bookmark"
-              >
-                Delete
-              </button>
-            </li>
-          )}
-          {settings.no_share !== 'true' && (
-            <>
-              <li>
-                <a 
-                  className="twitter" 
-                  href={`https://twitter.com/home?status=${encodeURI(url)}`}
-                  target="_blank" 
-                  title="Share on Twitter"
-                >
-                  Tweet
-                </a>
-              </li>
-              <li>
-                <a 
-                  className="facebook" 
-                  href={`http://www.facebook.com/sharer.php?u=${url}&t=${title}`}
-                  target="_blank" 
-                  title="Share on Facebook"
-                >
-                  Share
-                </a>
-              </li>
-              <li>
-                <a 
-                  className="email" 
-                  href={`mailto:?subject=Checkout this site: ${title}&body=${url}`}
-                  target="_blank" 
-                  title="Email to a Friend"
-                >
-                  Email
-                </a>
-              </li>
-            </>
-          )}
-          {!id && (
-            <li>
-              <a 
-                className="options" 
-                href={API.runtime.getURL("options.html")}
-                target="_blank" 
-                title="Settings"
-              >
-                Settings
-              </a>
-            </li>
-          )}
-        </ul>
-      </div>
+      <menu>
+        {items.map(item => <li>{item}</li>)}
+      </menu>
     )
   }
 
@@ -172,8 +167,8 @@ function Popup() {
   return (
     <div className="popup-container">
       <h2>
-        <strong>{domain}</strong> Bookmarks
         {renderMenu(domain, domain)}
+        <strong>{domain}</strong> Bookmarks
       </h2>
       <div className={`list ${settings.hover_url === 'true' ? 'hoverUrl' : ''} ${settings.no_folders !== 'true' ? 'folders' : ''}`}>
         {bookmarks.length === 0 ? (
@@ -182,13 +177,13 @@ function Popup() {
           <ul>
             {bookmarks.map((bookmark) => (
               <li key={bookmark.id}>
+                {renderMenu(bookmark.url, bookmark.title, bookmark.id)}
                 <a href={bookmark.url} target="_blank" title={bookmark.url}>
                   {bookmark.title}
                 </a>
                 {settings.no_folders !== 'true' && bookmark.parentId && (
                   <span className="folder">{bookmark.parentId}</span>
                 )}
-                {renderMenu(bookmark.url, bookmark.title, bookmark.id)}
               </li>
             ))}
           </ul>
