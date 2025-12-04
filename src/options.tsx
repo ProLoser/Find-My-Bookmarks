@@ -76,7 +76,7 @@ function OptionsPage() {
 
   return (
     <div className="options-container">
-      <h1>About Find My Bookmarks</h1>
+      <h1>About Bookmarked</h1>
       <div className="container">
         <p id="status" className={showStatus ? 'active' : ''}>
           Settings were saved!
@@ -203,8 +203,8 @@ function OptionsPage() {
           <h3>Credits</h3>
           <p>
             <strong>
-              <a href="http://www.findmybookmarks.com" target="_blank">
-                Find My Bookmarks
+              <a href="https://github.com/ProLoser/Find-My-Bookmarks" target="_blank">
+                Bookmarked
               </a>
             </strong> was brought to you by{" "}
             <a href="http://www.usabilitycounts.com" target="_blank">

@@ -1,4 +1,4 @@
-# Find My Bookmarks
+# Bookmarked
 
 A modern browser extension that helps you find all your related bookmarks for the current website. Now built with [Plasmo](https://plasmo.com) framework for multi-browser support.
 
