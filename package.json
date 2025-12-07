@@ -1,6 +1,6 @@
 {
-  "name": "find-my-bookmarks",
-  "displayName": "Find My Bookmarks",
+  "name": "bookmarked",
+  "displayName": "Bookmarked",
   "version": "2.0.0",
   "description": "Find all your related bookmarks for the current website.",
   "author": "Dean Sofer",
@@ -52,7 +52,7 @@
     ],
     "browser_specific_settings": {
       "gecko": {
-        "id": "@find-my-bookmarks",
+        "id": "@bookmarked",
         "strict_min_version": "109.0"
       }
     }

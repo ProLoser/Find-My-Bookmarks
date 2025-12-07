@@ -1,4 +1,4 @@
-// Background service worker for Find My Bookmarks extension
+// Background service worker for Bookmarked extension
 // Handles bookmark counting and page action display
 
 // Declare browser for cross-browser compatibility
